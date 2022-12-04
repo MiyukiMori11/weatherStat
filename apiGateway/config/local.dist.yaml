@@ -1,0 +1,22 @@
+gateway:
+  services:
+    - name: "explorer"
+      root: /api/explorer
+      host: localhost
+      port: 8081
+      scheme: HTTP
+      healthPath: /health
+      routes:
+        - path: /cities
+          method: PUT
+        - path: /cities
+          method: DELETE
+        - path: /cities
+          method: GET
+        - path: /temp
+          method: GET
+server:
+  listenHost: localhost
+  listenPort: 8000
+  scheme: HTTP
+  shutdownTimeoutSec: 5
