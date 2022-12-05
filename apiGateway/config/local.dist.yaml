@@ -3,7 +3,7 @@ gateway:
     - name: "explorer"
       root: /api/explorer
       host: localhost
-      port: 8081
+      port: "8081"
       scheme: HTTP
       healthPath: /health
       routes:
@@ -17,6 +17,6 @@ gateway:
           method: GET
 server:
   listenHost: localhost
-  listenPort: 8000
+  listenPort: "8000"
   scheme: HTTP
   shutdownTimeoutSec: 5

@@ -1,11 +1,8 @@
-package domain
+package config
 
-const (
-	GET    = "GET"
-	POST   = "POST"
-	PUT    = "PUT"
-	DELETE = "DELETE"
-)
+type Gateway struct {
+	Services []Service `yaml:"services"`
+}
 
 type Service struct {
 	Name       string  `yaml:"name"`

@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/MiyukiMori11/weatherstat/internal/config"
-	"github.com/MiyukiMori11/weatherstat/internal/proxy"
+	"github.com/MiyukiMori11/weatherstat/internal/router"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -17,7 +17,7 @@ type server struct {
 	engine *gin.Engine
 	logger *zap.Logger
 
-	proxy proxy.Proxy
+	router router.Router
 }
 
 type Server interface {
@@ -28,12 +28,12 @@ func New(
 	config *config.Server,
 	engine *gin.Engine,
 	logger *zap.Logger,
-	proxy proxy.Proxy) Server {
+	router router.Router) Server {
 	return &server{
 		config: config,
 		engine: engine,
 		logger: logger,
-		proxy:  proxy,
+		router: router,
 	}
 }
 
@@ -41,10 +41,12 @@ func (s *server) Run(ctx context.Context) error {
 	ctx, cancelFunc := context.WithCancel(ctx)
 	defer cancelFunc()
 
-	s.proxy.InitRoutes()
+	if err := s.router.InitRoutes(); err != nil {
+		return fmt.Errorf("can't init routes: %w", err)
+	}
 
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    s.config.Addr(),
 		Handler: s.engine,
 	}
 
