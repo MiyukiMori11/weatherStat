@@ -75,8 +75,8 @@ func (c *client) GetTemperature(latitude, longitude float64) (float64, error) {
 
 // GetCoordinates returns coordinates of city
 func (c *client) GetCoordinates(city, countryCode string) (float64, float64, error) {
-	// http: //api.openweathermap.org/geo/1.0/direct?q=London&limit=5&appid={API key}
 	var coordinatesInfo CoordinatesInfo
+
 	resp, err := c.http.Get(fmt.Sprintf("%s?q=%s,%s&limit=1&appid=%s", c.config.GeoAPI, city, countryCode, c.config.APIKey()))
 	if err != nil {
 		return 0, 0, fmt.Errorf("can't receive response: %w", err)
