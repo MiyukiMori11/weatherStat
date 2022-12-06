@@ -88,18 +88,30 @@ paths:
 parameters:
   CityNameQuery:
     in: query
-    name: name
+    name: city_name
+    type: string
+    required: true
+    maxLength: 25
+    pattern: ^[\w\-\' ]+ 
+  CountryNameQuery:
+    in: query
+    name: country_name
     type: string
     required: true
     maxLength: 25
     pattern: ^[\w\-\' ]+ 
   CityNameBody:
     in: body
-    name: name
+    name: city_name
     required: true
     schema: 
       $ref: '#/definitions/CityName'
-
+  CountryNameBody:
+    in: body
+    name: country_name
+    required: true
+    schema: 
+      $ref: '#/definitions/CountryName'
 
 
 definitions:
@@ -128,6 +140,10 @@ definitions:
           type: string
         }
   CityName:
+    type: string
+    maxLength: 25
+    pattern: ^[\w\-\' ]+
+  CountryName:
     type: string
     maxLength: 25
     pattern: ^[\w\-\' ]+

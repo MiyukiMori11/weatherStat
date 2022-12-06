@@ -94,5 +94,4 @@ func (c *client) GetCoordinates(city, countryCode string) (float64, float64, err
 
 	return coordinatesInfo.Latitude, coordinatesInfo.Longitude, err
 
-	//TODO: добавить страну для get temp, post, delete countries
 }
