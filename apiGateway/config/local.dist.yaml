@@ -8,7 +8,7 @@ gateway:
       healthPath: /health
       routes:
         - path: /cities
-          method: PUT
+          method: POST
         - path: /cities
           method: DELETE
         - path: /cities

@@ -9,8 +9,8 @@ import (
 )
 
 type Config struct {
-	Gateway Gateway `yaml:"gateway"`
-	Server  Server  `yaml:"server"`
+	Gateway *Gateway `yaml:"gateway"`
+	Server  *Server  `yaml:"server"`
 }
 
 func Load(fullPath string) (config *Config, err error) {

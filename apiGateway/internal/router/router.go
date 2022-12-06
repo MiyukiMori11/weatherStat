@@ -6,7 +6,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 
-	"github.com/MiyukiMori11/weatherstat/internal/config"
+	"github.com/MiyukiMori11/weatherstat/apigateway/internal/config"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

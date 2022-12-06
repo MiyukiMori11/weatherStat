@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/MiyukiMori11/weatherstat/internal/config"
-	"github.com/MiyukiMori11/weatherstat/internal/router"
+	"github.com/MiyukiMori11/weatherstat/apigateway/internal/config"
+	"github.com/MiyukiMori11/weatherstat/apigateway/internal/router"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

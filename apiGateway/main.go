@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/MiyukiMori11/weatherstat/cmd"
+	"github.com/MiyukiMori11/weatherstat/apigateway/cmd"
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +21,7 @@ func main() {
 	}()
 
 	rootCmd := &cobra.Command{}
-	rootCmd.AddCommand(cmd.RunApiGW)
+	rootCmd.AddCommand(cmd.RunApiGWCommand())
 	if err := rootCmd.ExecuteContext(ctx); err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
