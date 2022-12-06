@@ -63,7 +63,7 @@ func init() {
         "summary": "Adds a new city into subscripton list",
         "parameters": [
           {
-            "$ref": "#/parameters/CityNameBody"
+            "$ref": "#/parameters/CityBody"
           }
         ],
         "responses": {
@@ -95,6 +95,9 @@ func init() {
         "parameters": [
           {
             "$ref": "#/parameters/CityNameQuery"
+          },
+          {
+            "$ref": "#/parameters/CountryNameQuery"
           }
         ],
         "responses": {
@@ -125,6 +128,9 @@ func init() {
         "parameters": [
           {
             "$ref": "#/parameters/CityNameQuery"
+          },
+          {
+            "$ref": "#/parameters/CountryNameQuery"
           }
         ],
         "responses": {
@@ -158,9 +164,30 @@ func init() {
         "city_names": {
           "description": "List of cities in the subscription",
           "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "city_name": {
+                  "$ref": "#/definitions/CityName"
+                },
+                "country_name": {
+                  "$ref": "#/definitions/CountryName"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "CityBodySchema": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "$ref": "#/definitions/CountryName"
+        },
+        "name": {
+          "$ref": "#/definitions/CityName"
         }
       }
     },
@@ -184,22 +211,35 @@ func init() {
           "type": "string"
         }
       }
+    },
+    "CountryName": {
+      "type": "string",
+      "maxLength": 25,
+      "pattern": "^[\\w\\-\\' ]+"
     }
   },
   "parameters": {
-    "CityNameBody": {
-      "name": "name",
+    "CityBody": {
+      "name": "city",
       "in": "body",
       "required": true,
       "schema": {
-        "$ref": "#/definitions/CityName"
+        "$ref": "#/definitions/CityBodySchema"
       }
     },
     "CityNameQuery": {
       "maxLength": 25,
       "pattern": "^[\\w\\-\\' ]+",
       "type": "string",
-      "name": "name",
+      "name": "city_name",
+      "in": "query",
+      "required": true
+    },
+    "CountryNameQuery": {
+      "maxLength": 25,
+      "pattern": "^[\\w\\-\\' ]+",
+      "type": "string",
+      "name": "country_name",
       "in": "query",
       "required": true
     }
@@ -251,11 +291,11 @@ func init() {
         "summary": "Adds a new city into subscripton list",
         "parameters": [
           {
-            "name": "name",
+            "name": "city",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CityName"
+              "$ref": "#/definitions/CityBodySchema"
             }
           }
         ],
@@ -290,7 +330,15 @@ func init() {
             "maxLength": 25,
             "pattern": "^[\\w\\-\\' ]+",
             "type": "string",
-            "name": "name",
+            "name": "city_name",
+            "in": "query",
+            "required": true
+          },
+          {
+            "maxLength": 25,
+            "pattern": "^[\\w\\-\\' ]+",
+            "type": "string",
+            "name": "country_name",
             "in": "query",
             "required": true
           }
@@ -325,7 +373,15 @@ func init() {
             "maxLength": 25,
             "pattern": "^[\\w\\-\\' ]+",
             "type": "string",
-            "name": "name",
+            "name": "city_name",
+            "in": "query",
+            "required": true
+          },
+          {
+            "maxLength": 25,
+            "pattern": "^[\\w\\-\\' ]+",
+            "type": "string",
+            "name": "country_name",
             "in": "query",
             "required": true
           }
@@ -362,9 +418,60 @@ func init() {
         "city_names": {
           "description": "List of cities in the subscription",
           "type": "array",
-          "items": {
-            "type": "string"
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "city_name": {
+                  "$ref": "#/definitions/CityName"
+                },
+                "country_name": {
+                  "$ref": "#/definitions/CountryName"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "CitiesStatCityNamesTuple0": {
+      "type": "object",
+      "required": [
+        "P0"
+      ],
+      "properties": {
+        "P0": {
+          "type": "object",
+          "properties": {
+            "city_name": {
+              "$ref": "#/definitions/CityName"
+            },
+            "country_name": {
+              "$ref": "#/definitions/CountryName"
+            }
           }
+        }
+      }
+    },
+    "CitiesStatCityNamesTuple0P0": {
+      "type": "object",
+      "properties": {
+        "city_name": {
+          "$ref": "#/definitions/CityName"
+        },
+        "country_name": {
+          "$ref": "#/definitions/CountryName"
+        }
+      }
+    },
+    "CityBodySchema": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "$ref": "#/definitions/CountryName"
+        },
+        "name": {
+          "$ref": "#/definitions/CityName"
         }
       }
     },
@@ -388,22 +495,35 @@ func init() {
           "type": "string"
         }
       }
+    },
+    "CountryName": {
+      "type": "string",
+      "maxLength": 25,
+      "pattern": "^[\\w\\-\\' ]+"
     }
   },
   "parameters": {
-    "CityNameBody": {
-      "name": "name",
+    "CityBody": {
+      "name": "city",
       "in": "body",
       "required": true,
       "schema": {
-        "$ref": "#/definitions/CityName"
+        "$ref": "#/definitions/CityBodySchema"
       }
     },
     "CityNameQuery": {
       "maxLength": 25,
       "pattern": "^[\\w\\-\\' ]+",
       "type": "string",
-      "name": "name",
+      "name": "city_name",
+      "in": "query",
+      "required": true
+    },
+    "CountryNameQuery": {
+      "maxLength": 25,
+      "pattern": "^[\\w\\-\\' ]+",
+      "type": "string",
+      "name": "country_name",
       "in": "query",
       "required": true
     }

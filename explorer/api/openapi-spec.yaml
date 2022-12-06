@@ -31,7 +31,7 @@ paths:
       consumes:
         - application/json
       parameters:
-        - $ref: '#/parameters/CityNameBody'
+        - $ref: '#/parameters/CityBody'
       produces:
         - application/json
       responses:
@@ -52,6 +52,7 @@ paths:
         - application/json
       parameters:
         - $ref: '#/parameters/CityNameQuery'
+        - $ref: '#/parameters/CountryNameQuery'
       produces:
         - application/json
       responses:
@@ -71,6 +72,7 @@ paths:
 
       parameters:
         - $ref: '#/parameters/CityNameQuery'
+        - $ref: '#/parameters/CountryNameQuery'
       produces:
         - application/json
       responses:
@@ -100,21 +102,23 @@ parameters:
     required: true
     maxLength: 25
     pattern: ^[\w\-\' ]+ 
-  CityNameBody:
+  CityBody:
     in: body
-    name: city_name
+    name: city
     required: true
     schema: 
-      $ref: '#/definitions/CityName'
-  CountryNameBody:
-    in: body
-    name: country_name
-    required: true
-    schema: 
-      $ref: '#/definitions/CountryName'
+      $ref: '#/definitions/CityBodySchema'
 
 
 definitions:
+  CityBodySchema:
+    type: object
+    properties: 
+      name:
+        $ref: '#/definitions/CityName'
+      country:
+        $ref: '#/definitions/CountryName'
+
   CityTemp:
     type: object
     properties: 
@@ -136,9 +140,15 @@ definitions:
       city_names:
         description: List of cities in the subscription
         type: array
-        items: {
-          type: string
-        }
+        items: 
+          - type: object
+            properties: 
+              city_name:
+                $ref: '#/definitions/CityName'
+              country_name:
+                $ref: '#/definitions/CountryName'
+              
+        
   CityName:
     type: string
     maxLength: 25

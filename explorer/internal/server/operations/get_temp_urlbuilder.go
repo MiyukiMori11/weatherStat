@@ -13,7 +13,8 @@ import (
 
 // GetTempURL generates an URL for the get temp operation
 type GetTempURL struct {
-	Name string
+	CityName    string
+	CountryName string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -49,9 +50,14 @@ func (o *GetTempURL) Build() (*url.URL, error) {
 
 	qs := make(url.Values)
 
-	nameQ := o.Name
-	if nameQ != "" {
-		qs.Set("name", nameQ)
+	cityNameQ := o.CityName
+	if cityNameQ != "" {
+		qs.Set("city_name", cityNameQ)
+	}
+
+	countryNameQ := o.CountryName
+	if countryNameQ != "" {
+		qs.Set("country_name", countryNameQ)
 	}
 
 	_result.RawQuery = qs.Encode()

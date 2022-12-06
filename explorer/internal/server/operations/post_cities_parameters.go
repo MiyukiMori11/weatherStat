@@ -38,7 +38,7 @@ type PostCitiesParams struct {
 	  Required: true
 	  In: body
 	*/
-	Name models.CityName
+	City *models.CityBodySchema
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -52,12 +52,12 @@ func (o *PostCitiesParams) BindRequest(r *http.Request, route *middleware.Matche
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.CityName
+		var body models.CityBodySchema
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
-				res = append(res, errors.Required("name", "body", ""))
+				res = append(res, errors.Required("city", "body", ""))
 			} else {
-				res = append(res, errors.NewParseError("name", "body", "", err))
+				res = append(res, errors.NewParseError("city", "body", "", err))
 			}
 		} else {
 			// validate body object
@@ -71,11 +71,11 @@ func (o *PostCitiesParams) BindRequest(r *http.Request, route *middleware.Matche
 			}
 
 			if len(res) == 0 {
-				o.Name = body
+				o.City = &body
 			}
 		}
 	} else {
-		res = append(res, errors.Required("name", "body", ""))
+		res = append(res, errors.Required("city", "body", ""))
 	}
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

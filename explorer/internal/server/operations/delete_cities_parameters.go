@@ -38,7 +38,14 @@ type DeleteCitiesParams struct {
 	  Pattern: ^[\w\-\' ]+
 	  In: query
 	*/
-	Name string
+	CityName string
+	/*
+	  Required: true
+	  Max Length: 25
+	  Pattern: ^[\w\-\' ]+
+	  In: query
+	*/
+	CountryName string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -52,8 +59,13 @@ func (o *DeleteCitiesParams) BindRequest(r *http.Request, route *middleware.Matc
 
 	qs := runtime.Values(r.URL.Query())
 
-	qName, qhkName, _ := qs.GetOK("name")
-	if err := o.bindName(qName, qhkName, route.Formats); err != nil {
+	qCityName, qhkCityName, _ := qs.GetOK("city_name")
+	if err := o.bindCityName(qCityName, qhkCityName, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qCountryName, qhkCountryName, _ := qs.GetOK("country_name")
+	if err := o.bindCountryName(qCountryName, qhkCountryName, route.Formats); err != nil {
 		res = append(res, err)
 	}
 	if len(res) > 0 {
@@ -62,10 +74,10 @@ func (o *DeleteCitiesParams) BindRequest(r *http.Request, route *middleware.Matc
 	return nil
 }
 
-// bindName binds and validates parameter Name from query.
-func (o *DeleteCitiesParams) bindName(rawData []string, hasKey bool, formats strfmt.Registry) error {
+// bindCityName binds and validates parameter CityName from query.
+func (o *DeleteCitiesParams) bindCityName(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	if !hasKey {
-		return errors.Required("name", "query", rawData)
+		return errors.Required("city_name", "query", rawData)
 	}
 	var raw string
 	if len(rawData) > 0 {
@@ -75,26 +87,65 @@ func (o *DeleteCitiesParams) bindName(rawData []string, hasKey bool, formats str
 	// Required: true
 	// AllowEmptyValue: false
 
-	if err := validate.RequiredString("name", "query", raw); err != nil {
+	if err := validate.RequiredString("city_name", "query", raw); err != nil {
 		return err
 	}
-	o.Name = raw
+	o.CityName = raw
 
-	if err := o.validateName(formats); err != nil {
+	if err := o.validateCityName(formats); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-// validateName carries on validations for parameter Name
-func (o *DeleteCitiesParams) validateName(formats strfmt.Registry) error {
+// validateCityName carries on validations for parameter CityName
+func (o *DeleteCitiesParams) validateCityName(formats strfmt.Registry) error {
 
-	if err := validate.MaxLength("name", "query", o.Name, 25); err != nil {
+	if err := validate.MaxLength("city_name", "query", o.CityName, 25); err != nil {
 		return err
 	}
 
-	if err := validate.Pattern("name", "query", o.Name, `^[\w\-\' ]+`); err != nil {
+	if err := validate.Pattern("city_name", "query", o.CityName, `^[\w\-\' ]+`); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// bindCountryName binds and validates parameter CountryName from query.
+func (o *DeleteCitiesParams) bindCountryName(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	if !hasKey {
+		return errors.Required("country_name", "query", rawData)
+	}
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: true
+	// AllowEmptyValue: false
+
+	if err := validate.RequiredString("country_name", "query", raw); err != nil {
+		return err
+	}
+	o.CountryName = raw
+
+	if err := o.validateCountryName(formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateCountryName carries on validations for parameter CountryName
+func (o *DeleteCitiesParams) validateCountryName(formats strfmt.Registry) error {
+
+	if err := validate.MaxLength("country_name", "query", o.CountryName, 25); err != nil {
+		return err
+	}
+
+	if err := validate.Pattern("country_name", "query", o.CountryName, `^[\w\-\' ]+`); err != nil {
 		return err
 	}
 

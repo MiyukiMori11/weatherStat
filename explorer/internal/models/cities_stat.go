@@ -6,7 +6,9 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
@@ -23,8 +25,8 @@ type CitiesStat struct {
 	// Minimum: 0
 	CitiesCount *int64 `json:"cities_count,omitempty"`
 
-	// List of cities in the subscription
-	CityNames []string `json:"city_names"`
+	// city names
+	CityNames *CitiesStatCityNamesTuple0 `json:"city_names,omitempty"`
 }
 
 // Validate validates this cities stat
@@ -32,6 +34,10 @@ func (m *CitiesStat) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateCitiesCount(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCityNames(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -53,8 +59,52 @@ func (m *CitiesStat) validateCitiesCount(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this cities stat based on context it is used
+func (m *CitiesStat) validateCityNames(formats strfmt.Registry) error {
+	if swag.IsZero(m.CityNames) { // not required
+		return nil
+	}
+
+	if m.CityNames != nil {
+		if err := m.CityNames.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("city_names")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("city_names")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this cities stat based on the context it is used
 func (m *CitiesStat) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCityNames(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CitiesStat) contextValidateCityNames(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CityNames != nil {
+		if err := m.CityNames.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("city_names")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("city_names")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -69,6 +119,272 @@ func (m *CitiesStat) MarshalBinary() ([]byte, error) {
 // UnmarshalBinary interface implementation
 func (m *CitiesStat) UnmarshalBinary(b []byte) error {
 	var res CitiesStat
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
+	return nil
+}
+
+// CitiesStatCityNamesTuple0 CitiesStatCityNamesTuple0 a representation of an anonymous Tuple type
+//
+// swagger:model CitiesStatCityNamesTuple0
+type CitiesStatCityNamesTuple0 struct {
+
+	// p0
+	// Required: true
+	P0 *CitiesStatCityNamesTuple0P0 `json:"-"` // custom serializer
+
+}
+
+// UnmarshalJSON unmarshals this tuple type from a JSON array
+func (m *CitiesStatCityNamesTuple0) UnmarshalJSON(raw []byte) error {
+	// stage 1, get the array but just the array
+	var stage1 []json.RawMessage
+	buf := bytes.NewBuffer(raw)
+	dec := json.NewDecoder(buf)
+	dec.UseNumber()
+
+	if err := dec.Decode(&stage1); err != nil {
+		return err
+	}
+
+	// stage 2: hydrates struct members with tuple elements
+	if len(stage1) > 0 {
+		var dataP0 CitiesStatCityNamesTuple0P0
+		buf = bytes.NewBuffer(stage1[0])
+		dec := json.NewDecoder(buf)
+		dec.UseNumber()
+		if err := dec.Decode(&dataP0); err != nil {
+			return err
+		}
+		m.P0 = &dataP0
+
+	}
+
+	return nil
+}
+
+// MarshalJSON marshals this tuple type into a JSON array
+func (m CitiesStatCityNamesTuple0) MarshalJSON() ([]byte, error) {
+	data := []interface{}{
+		m.P0,
+	}
+
+	return json.Marshal(data)
+}
+
+// Validate validates this cities stat city names tuple0
+func (m *CitiesStatCityNamesTuple0) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateP0(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CitiesStatCityNamesTuple0) validateP0(formats strfmt.Registry) error {
+
+	if err := validate.Required("P0", "body", m.P0); err != nil {
+		return err
+	}
+
+	if m.P0 != nil {
+		if err := m.P0.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("P0")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("P0")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this cities stat city names tuple0 based on the context it is used
+func (m *CitiesStatCityNamesTuple0) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateP0(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CitiesStatCityNamesTuple0) contextValidateP0(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.P0 != nil {
+		if err := m.P0.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("P0")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("P0")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *CitiesStatCityNamesTuple0) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *CitiesStatCityNamesTuple0) UnmarshalBinary(b []byte) error {
+	var res CitiesStatCityNamesTuple0
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
+	return nil
+}
+
+// CitiesStatCityNamesTuple0P0 cities stat city names tuple0 p0
+//
+// swagger:model CitiesStatCityNamesTuple0P0
+type CitiesStatCityNamesTuple0P0 struct {
+
+	// city name
+	CityName *CityName `json:"city_name,omitempty"`
+
+	// country name
+	CountryName *CountryName `json:"country_name,omitempty"`
+}
+
+// Validate validates this cities stat city names tuple0 p0
+func (m *CitiesStatCityNamesTuple0P0) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateCityName(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateCountryName(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CitiesStatCityNamesTuple0P0) validateCityName(formats strfmt.Registry) error {
+	if swag.IsZero(m.CityName) { // not required
+		return nil
+	}
+
+	if m.CityName != nil {
+		if err := m.CityName.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("P0" + "." + "city_name")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("P0" + "." + "city_name")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CitiesStatCityNamesTuple0P0) validateCountryName(formats strfmt.Registry) error {
+	if swag.IsZero(m.CountryName) { // not required
+		return nil
+	}
+
+	if m.CountryName != nil {
+		if err := m.CountryName.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("P0" + "." + "country_name")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("P0" + "." + "country_name")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this cities stat city names tuple0 p0 based on the context it is used
+func (m *CitiesStatCityNamesTuple0P0) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateCityName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateCountryName(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *CitiesStatCityNamesTuple0P0) contextValidateCityName(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CityName != nil {
+		if err := m.CityName.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("P0" + "." + "city_name")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("P0" + "." + "city_name")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CitiesStatCityNamesTuple0P0) contextValidateCountryName(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.CountryName != nil {
+		if err := m.CountryName.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("P0" + "." + "country_name")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("P0" + "." + "country_name")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *CitiesStatCityNamesTuple0P0) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *CitiesStatCityNamesTuple0P0) UnmarshalBinary(b []byte) error {
+	var res CitiesStatCityNamesTuple0P0
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
