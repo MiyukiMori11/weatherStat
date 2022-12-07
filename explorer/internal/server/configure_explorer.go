@@ -4,16 +4,20 @@ package server
 
 import (
 	"crypto/tls"
+	"fmt"
 	"net/http"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+	"go.uber.org/zap"
 
 	"github.com/MiyukiMori11/weatherstat/explorer/internal/server/operations"
 )
 
 //go:generate swagger generate server --target ../../internal --name Explorer --spec ../../api/openapi-spec.yaml --server-package server --principal interface{} --exclude-main
+
+var logger *zap.Logger
 
 func configureFlags(api *operations.ExplorerAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -28,6 +32,10 @@ func configureAPI(api *operations.ExplorerAPI) http.Handler {
 	//
 	// Example:
 	// api.Logger = log.Printf
+
+	api.Logger = func(s string, i ...interface{}) {
+		logger.Info(fmt.Sprintf(s, i))
+	}
 
 	api.UseSwaggerUI()
 	// To continue using redoc as your UI, uncomment the following line
@@ -86,5 +94,12 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.
 // So this is a good place to plug in a panic handling middleware, logging and metrics.
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
-	return handler
+	return func(next http.Handler) http.Handler {
+		fn := func(w http.ResponseWriter, r *http.Request) {
+			logger.Info("incoming request", zap.String("method", r.Method), zap.String("endpoint", r.RequestURI))
+			next.ServeHTTP(w, r)
+		}
+
+		return http.HandlerFunc(fn)
+	}(handler)
 }

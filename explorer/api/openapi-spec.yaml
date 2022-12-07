@@ -37,8 +37,6 @@ paths:
       responses:
         200:
           description: OK
-          schema: 
-            $ref: '#/definitions/CityTemp'
         400:
           description: Bad request
         404:
@@ -58,8 +56,6 @@ paths:
       responses:
         200:
           description: OK
-          schema: 
-            $ref: '#/definitions/CitiesStat'
         400:
           description: Bad request
         404:
@@ -130,6 +126,13 @@ definitions:
       avg_f:
         description: Average temperature in Fahrenheit
         type: integer
+  CityInfo:
+    type: object
+    properties: 
+      city_name:
+        $ref: '#/definitions/CityName'
+      country_name:
+        $ref: '#/definitions/CountryName'
   CitiesStat:
     type: object
     properties: 
@@ -137,16 +140,11 @@ definitions:
         description: Number of cities in the subscription
         type: integer
         minimum: 0
-      city_names:
+      cities:
         description: List of cities in the subscription
         type: array
         items: 
-          - type: object
-            properties: 
-              city_name:
-                $ref: '#/definitions/CityName'
-              country_name:
-                $ref: '#/definitions/CountryName'
+          $ref: '#/definitions/CityInfo'
               
         
   CityName:

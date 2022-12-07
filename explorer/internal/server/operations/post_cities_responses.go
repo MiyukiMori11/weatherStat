@@ -9,8 +9,6 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
-
-	"github.com/MiyukiMori11/weatherstat/explorer/internal/models"
 )
 
 // PostCitiesOKCode is the HTTP code returned for type PostCitiesOK
@@ -22,11 +20,6 @@ PostCitiesOK OK
 swagger:response postCitiesOK
 */
 type PostCitiesOK struct {
-
-	/*
-	  In: Body
-	*/
-	Payload *models.CityTemp `json:"body,omitempty"`
 }
 
 // NewPostCitiesOK creates PostCitiesOK with default headers values
@@ -35,27 +28,12 @@ func NewPostCitiesOK() *PostCitiesOK {
 	return &PostCitiesOK{}
 }
 
-// WithPayload adds the payload to the post cities o k response
-func (o *PostCitiesOK) WithPayload(payload *models.CityTemp) *PostCitiesOK {
-	o.Payload = payload
-	return o
-}
-
-// SetPayload sets the payload to the post cities o k response
-func (o *PostCitiesOK) SetPayload(payload *models.CityTemp) {
-	o.Payload = payload
-}
-
 // WriteResponse to the client
 func (o *PostCitiesOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
 	rw.WriteHeader(200)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
-	}
 }
 
 // PostCitiesBadRequestCode is the HTTP code returned for type PostCitiesBadRequest

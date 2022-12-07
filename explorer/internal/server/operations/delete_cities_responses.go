@@ -9,8 +9,6 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
-
-	"github.com/MiyukiMori11/weatherstat/explorer/internal/models"
 )
 
 // DeleteCitiesOKCode is the HTTP code returned for type DeleteCitiesOK
@@ -22,11 +20,6 @@ DeleteCitiesOK OK
 swagger:response deleteCitiesOK
 */
 type DeleteCitiesOK struct {
-
-	/*
-	  In: Body
-	*/
-	Payload *models.CitiesStat `json:"body,omitempty"`
 }
 
 // NewDeleteCitiesOK creates DeleteCitiesOK with default headers values
@@ -35,27 +28,12 @@ func NewDeleteCitiesOK() *DeleteCitiesOK {
 	return &DeleteCitiesOK{}
 }
 
-// WithPayload adds the payload to the delete cities o k response
-func (o *DeleteCitiesOK) WithPayload(payload *models.CitiesStat) *DeleteCitiesOK {
-	o.Payload = payload
-	return o
-}
-
-// SetPayload sets the payload to the delete cities o k response
-func (o *DeleteCitiesOK) SetPayload(payload *models.CitiesStat) {
-	o.Payload = payload
-}
-
 // WriteResponse to the client
 func (o *DeleteCitiesOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
 	rw.WriteHeader(200)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
-	}
 }
 
 // DeleteCitiesBadRequestCode is the HTTP code returned for type DeleteCitiesBadRequest

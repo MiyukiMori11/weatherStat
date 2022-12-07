@@ -68,10 +68,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CityTemp"
-            }
+            "description": "OK"
           },
           "400": {
             "description": "Bad request"
@@ -102,10 +99,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CitiesStat"
-            }
+            "description": "OK"
           },
           "400": {
             "description": "Bad request"
@@ -157,26 +151,16 @@ func init() {
     "CitiesStat": {
       "type": "object",
       "properties": {
+        "cities": {
+          "description": "List of cities in the subscription",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CityInfo"
+          }
+        },
         "cities_count": {
           "description": "Number of cities in the subscription",
           "type": "integer"
-        },
-        "city_names": {
-          "description": "List of cities in the subscription",
-          "type": "array",
-          "items": [
-            {
-              "type": "object",
-              "properties": {
-                "city_name": {
-                  "$ref": "#/definitions/CityName"
-                },
-                "country_name": {
-                  "$ref": "#/definitions/CountryName"
-                }
-              }
-            }
-          ]
         }
       }
     },
@@ -188,6 +172,17 @@ func init() {
         },
         "name": {
           "$ref": "#/definitions/CityName"
+        }
+      }
+    },
+    "CityInfo": {
+      "type": "object",
+      "properties": {
+        "city_name": {
+          "$ref": "#/definitions/CityName"
+        },
+        "country_name": {
+          "$ref": "#/definitions/CountryName"
         }
       }
     },
@@ -301,10 +296,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CityTemp"
-            }
+            "description": "OK"
           },
           "400": {
             "description": "Bad request"
@@ -345,10 +337,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CitiesStat"
-            }
+            "description": "OK"
           },
           "400": {
             "description": "Bad request"
@@ -410,57 +399,17 @@ func init() {
     "CitiesStat": {
       "type": "object",
       "properties": {
+        "cities": {
+          "description": "List of cities in the subscription",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CityInfo"
+          }
+        },
         "cities_count": {
           "description": "Number of cities in the subscription",
           "type": "integer",
           "minimum": 0
-        },
-        "city_names": {
-          "description": "List of cities in the subscription",
-          "type": "array",
-          "items": [
-            {
-              "type": "object",
-              "properties": {
-                "city_name": {
-                  "$ref": "#/definitions/CityName"
-                },
-                "country_name": {
-                  "$ref": "#/definitions/CountryName"
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
-    "CitiesStatCityNamesTuple0": {
-      "type": "object",
-      "required": [
-        "P0"
-      ],
-      "properties": {
-        "P0": {
-          "type": "object",
-          "properties": {
-            "city_name": {
-              "$ref": "#/definitions/CityName"
-            },
-            "country_name": {
-              "$ref": "#/definitions/CountryName"
-            }
-          }
-        }
-      }
-    },
-    "CitiesStatCityNamesTuple0P0": {
-      "type": "object",
-      "properties": {
-        "city_name": {
-          "$ref": "#/definitions/CityName"
-        },
-        "country_name": {
-          "$ref": "#/definitions/CountryName"
         }
       }
     },
@@ -472,6 +421,17 @@ func init() {
         },
         "name": {
           "$ref": "#/definitions/CityName"
+        }
+      }
+    },
+    "CityInfo": {
+      "type": "object",
+      "properties": {
+        "city_name": {
+          "$ref": "#/definitions/CityName"
+        },
+        "country_name": {
+          "$ref": "#/definitions/CountryName"
         }
       }
     },
