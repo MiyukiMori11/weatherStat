@@ -17,7 +17,7 @@ type Parser interface {
 
 type Storage interface {
 	GetSubscribedCities() (domain.Cities, error)
-	AddTemperatureForCountries(domain.Cities) error
+	AddTemperatureForCities(domain.Cities) error
 }
 
 type Client interface {
@@ -51,7 +51,7 @@ func (p *parser) Run(ctx context.Context) {
 	ctx, cancelFunc := context.WithCancel(ctx)
 	defer cancelFunc()
 
-	ticker := time.NewTicker(p.config.CntDayArchive())
+	ticker := time.NewTicker(p.config.Timeout())
 
 loop:
 	for {
@@ -96,6 +96,9 @@ func (p *parser) parse() {
 
 	wg.Wait()
 
-	p.storage.AddTemperatureForCountries(cities)
+	if err := p.storage.AddTemperatureForCities(cities); err != nil {
+		errChan <- err
+		return
+	}
 
 }

@@ -196,11 +196,11 @@ func init() {
       "properties": {
         "avg_c": {
           "description": "Average temperature in Celsius",
-          "type": "integer"
+          "type": "number"
         },
         "avg_f": {
           "description": "Average temperature in Fahrenheit",
-          "type": "integer"
+          "type": "number"
         },
         "name": {
           "type": "string"
@@ -445,11 +445,11 @@ func init() {
       "properties": {
         "avg_c": {
           "description": "Average temperature in Celsius",
-          "type": "integer"
+          "type": "number"
         },
         "avg_f": {
           "description": "Average temperature in Fahrenheit",
-          "type": "integer"
+          "type": "number"
         },
         "name": {
           "type": "string"

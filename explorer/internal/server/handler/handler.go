@@ -27,7 +27,7 @@ type Storage interface {
 	GetSubscribedCities() (domain.Cities, error)
 	GetCountryCode(countryName string) (string, error)
 	AddCity(domain.City) error
-	GetTemperatureStat(*domain.City) error
+	GetTemperatureStat(cityName, countryName string) (float64, float64, error)
 	DeleteCity(cityName, countryName string) error
 }
 
@@ -114,15 +114,15 @@ func (h *handler) DeleteCities(dcp operations.DeleteCitiesParams) middleware.Res
 
 // GetTemp handles GET /temp request
 func (h *handler) GetTemp(gtp operations.GetTempParams) middleware.Responder {
-	city := domain.City{
-		Name:        gtp.CityName,
-		CountryName: gtp.CountryName,
+	var err error
+	response := models.CityTemp{
+		Name: gtp.CityName,
 	}
 
-	if err := h.storage.GetTemperatureStat(&city); err != nil {
-		h.logger.Error("can't get temperature statistics", zap.Error(err), zap.String("country", city.CountryName), zap.String("city", city.Name))
+	if response.Avgc, response.Avgf, err = h.storage.GetTemperatureStat(gtp.CityName, gtp.CountryName); err != nil {
+		h.logger.Error("can't get temperature statistics", zap.Error(err), zap.String("country", gtp.CountryName), zap.String("city", gtp.CityName))
 		return operations.NewGetTempBadRequest()
 	}
 
-	return operations.NewGetTempOK()
+	return operations.NewGetTempOK().WithPayload(&response)
 }

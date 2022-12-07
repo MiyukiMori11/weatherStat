@@ -20,6 +20,7 @@ type client struct {
 
 type Client interface {
 	GetTemperature(Latitude, Longitude float64) (float64, error)
+	GetCoordinates(city, countryCode string) (float64, float64, error)
 }
 
 // TempResponse is a structure of response to weatherApi request

@@ -17,7 +17,7 @@ import (
 
 //go:generate swagger generate server --target ../../internal --name Explorer --spec ../../api/openapi-spec.yaml --server-package server --principal interface{} --exclude-main
 
-var logger *zap.Logger
+var Logger *zap.Logger
 
 func configureFlags(api *operations.ExplorerAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -34,7 +34,7 @@ func configureAPI(api *operations.ExplorerAPI) http.Handler {
 	// api.Logger = log.Printf
 
 	api.Logger = func(s string, i ...interface{}) {
-		logger.Info(fmt.Sprintf(s, i))
+		Logger.Info(fmt.Sprintf(s, i))
 	}
 
 	api.UseSwaggerUI()
@@ -96,7 +96,7 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
-			logger.Info("incoming request", zap.String("method", r.Method), zap.String("endpoint", r.RequestURI))
+			Logger.Info("incoming request", zap.String("method", r.Method), zap.String("endpoint", r.RequestURI))
 			next.ServeHTTP(w, r)
 		}
 

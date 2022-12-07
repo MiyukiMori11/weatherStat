@@ -1,0 +1,3 @@
+client:
+  geoAPI: "http://api.openweathermap.org/geo/1.0/direct"
+  weatherAPI: "https://api.openweathermap.org/data/2.5/weather"

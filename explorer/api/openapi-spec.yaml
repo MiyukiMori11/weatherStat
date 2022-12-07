@@ -122,10 +122,10 @@ definitions:
         type: string
       avg_c:
         description: Average temperature in Celsius
-        type: integer
+        type: number
       avg_f:
         description: Average temperature in Fahrenheit
-        type: integer
+        type: number
   CityInfo:
     type: object
     properties: 

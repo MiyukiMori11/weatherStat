@@ -18,10 +18,10 @@ import (
 type CityTemp struct {
 
 	// Average temperature in Celsius
-	Avgc int64 `json:"avg_c,omitempty"`
+	Avgc float64 `json:"avg_c,omitempty"`
 
 	// Average temperature in Fahrenheit
-	Avgf int64 `json:"avg_f,omitempty"`
+	Avgf float64 `json:"avg_f,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`

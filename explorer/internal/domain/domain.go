@@ -1,8 +1,11 @@
 package domain
 
-type Country struct {
+import "errors"
+
+type City struct {
 	Name        string
 	CountryCode string
+	CountryName string
 	Latitude    float64
 	Longitude   float64
 	TempK       float64
@@ -10,4 +13,6 @@ type Country struct {
 	TempF       float64
 }
 
-type Countries []Country
+type Cities []City
+
+var ErrNotFound = errors.New("not found")
