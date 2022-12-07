@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/MiyukiMori11/weatherstat/explorer/internal/config"
+	"github.com/MiyukiMori11/weatherstat/explorer/internal/domain"
 	"go.uber.org/zap"
 )
 
@@ -75,7 +76,7 @@ func (c *client) GetTemperature(latitude, longitude float64) (float64, error) {
 
 // GetCoordinates returns coordinates of city
 func (c *client) GetCoordinates(city, countryCode string) (float64, float64, error) {
-	var coordinatesInfo CoordinatesInfo
+	var response GeoResponse
 
 	resp, err := c.http.Get(fmt.Sprintf("%s?q=%s,%s&limit=1&appid=%s", c.config.GeoAPI, city, countryCode, c.config.APIKey()))
 	if err != nil {
@@ -88,10 +89,16 @@ func (c *client) GetCoordinates(city, countryCode string) (float64, float64, err
 		return 0, 0, fmt.Errorf("can't read data from body: %w", err)
 	}
 
-	if err := json.Unmarshal(data, &coordinatesInfo); err != nil {
+	if err := json.Unmarshal(data, &response); err != nil {
 		return 0, 0, fmt.Errorf("can't unmarshal body: %w", err)
 	}
 
-	return coordinatesInfo.Latitude, coordinatesInfo.Longitude, err
+	if len(response.CountriesList) == 0 {
+		return 0, 0, domain.ErrNotFound
+	}
+
+	coordinates := response.CountriesList[0]
+
+	return coordinates.Latitude, coordinates.Longitude, err
 
 }

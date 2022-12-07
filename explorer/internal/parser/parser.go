@@ -16,8 +16,8 @@ type Parser interface {
 }
 
 type Storage interface {
-	GetSubscribedCountries() (domain.Countries, error)
-	AddTemperatureForCountries(domain.Countries) error
+	GetSubscribedCities() (domain.Cities, error)
+	AddTemperatureForCountries(domain.Cities) error
 }
 
 type Client interface {
@@ -72,16 +72,16 @@ loop:
 func (p *parser) parse() {
 	defer func() { done <- struct{}{} }()
 
-	countries, err := p.storage.GetSubscribedCountries()
+	cities, err := p.storage.GetSubscribedCities()
 	if err != nil {
 		errChan <- err
 		return
 	}
 	wg := &sync.WaitGroup{}
 
-	wg.Add(len(countries))
-	for _, country := range countries {
-		go func(c domain.Country) {
+	wg.Add(len(cities))
+	for _, city := range cities {
+		go func(c domain.City) {
 			defer wg.Done()
 			var err error
 			c.TempK, err = p.client.GetTemperature(c.Latitude, c.Longitude)
@@ -91,11 +91,11 @@ func (p *parser) parse() {
 			}
 			c.TempC = c.TempK - 273
 			c.TempF = 1.8*(c.TempK-273) + 32
-		}(country)
+		}(city)
 	}
 
 	wg.Wait()
 
-	p.storage.AddTemperatureForCountries(countries)
+	p.storage.AddTemperatureForCountries(cities)
 
 }
