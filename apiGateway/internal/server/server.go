@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/MiyukiMori11/weatherstat/apigateway/internal/config"
 	"github.com/MiyukiMori11/weatherstat/apigateway/internal/router"
@@ -54,6 +55,7 @@ func (s *server) Run(ctx context.Context) error {
 		defer cancelFunc()
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			s.logger.Error("listen error", zap.Error(err))
+			os.Exit(1)
 		}
 	}()
 

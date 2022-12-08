@@ -43,7 +43,7 @@ func (r *router) InitRoutes() error {
 		for _, route := range service.Routes {
 			handler, err := r.proxyHandler(
 				service.Scheme+"://"+service.Host+":"+service.Port,
-				route.Path)
+				service.Root+route.Path)
 			if err != nil {
 				return fmt.Errorf("can't create handler for %s: %w", service.Name, err)
 			}
