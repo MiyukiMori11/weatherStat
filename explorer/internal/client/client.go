@@ -1,3 +1,4 @@
+// Package client represents http client for requests to external api
 package client
 
 import (
@@ -37,9 +38,7 @@ type CoordinatesInfo struct {
 }
 
 // GeoResponse is a structure of response to geoApi request
-type GeoResponse struct {
-	CountriesList []CoordinatesInfo
-}
+type GeoResponse []CoordinatesInfo
 
 // New is a client constructor
 func New(cfg *config.Client, logger *zap.Logger) Client {
@@ -70,7 +69,6 @@ func (c *client) GetTemperature(latitude, longitude float64) (float64, error) {
 	if err := json.Unmarshal(data, &tempInfo); err != nil {
 		return 0, fmt.Errorf("can't unmarshal body: %w", err)
 	}
-
 	return tempInfo.Main.Temp, nil
 
 }
@@ -94,11 +92,11 @@ func (c *client) GetCoordinates(city, countryCode string) (float64, float64, err
 		return 0, 0, fmt.Errorf("can't unmarshal body: %w", err)
 	}
 
-	if len(response.CountriesList) == 0 {
+	if len(response) == 0 {
 		return 0, 0, domain.ErrNotFound
 	}
 
-	coordinates := response.CountriesList[0]
+	coordinates := response[0]
 
 	return coordinates.Latitude, coordinates.Longitude, err
 

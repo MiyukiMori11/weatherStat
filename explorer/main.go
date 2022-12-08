@@ -21,7 +21,7 @@ func main() {
 	}()
 
 	rootCmd := &cobra.Command{}
-	rootCmd.AddCommand(cmd.RunExplorerCommand())
+	rootCmd.AddCommand(cmd.RunExplorerCommand(), cmd.MigrateCommand())
 	if err := rootCmd.ExecuteContext(ctx); err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)

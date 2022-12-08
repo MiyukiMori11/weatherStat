@@ -17,6 +17,8 @@ const (
 
 	weatherApiKey = "WEATHER_API_KEY"
 
+	listenPort = "PORT"
+
 	// DB global settings
 	dbName     = "DB_NAME"
 	dbUsername = "DB_USERNAME"
@@ -29,6 +31,11 @@ type Config struct {
 	Parser  *Parser
 	Client  *Client `yaml:"client"`
 	Storage *Storage
+	Server  *Server
+}
+
+type Server struct {
+	Port int
 }
 
 type Storage struct {
@@ -69,7 +76,13 @@ func load(path, name, format string) (config *Config, err error) {
 
 	viper.BindEnv(weatherApiKey)
 
-	viper.BindEnv(dbName, dbUsername, dbPassword, dbHost, dbPort)
+	viper.BindEnv(listenPort)
+
+	viper.BindEnv(dbName)
+	viper.BindEnv(dbUsername)
+	viper.BindEnv(dbPassword)
+	viper.BindEnv(dbHost)
+	viper.BindEnv(dbPort)
 
 	err = viper.ReadInConfig()
 	if err != nil {
@@ -78,20 +91,22 @@ func load(path, name, format string) (config *Config, err error) {
 
 	err = viper.Unmarshal(&config)
 
-	config.Parser = &Parser{
-		parseTimeoutMin: viper.GetInt(parseTimeoutMin),
-	}
+	config.Parser = &Parser{}
+	config.Parser.parseTimeoutMin = viper.GetInt(parseTimeoutMin)
 
 	config.Client.apiKey = viper.GetString(weatherApiKey)
 	config.Client.timeout = viper.GetInt(clientTimeoutSec)
 
-	config.Storage = &Storage{
-		username: viper.GetString(dbUsername),
-		password: viper.GetString(dbPassword),
-		host:     viper.GetString(dbHost),
-		port:     viper.GetString(dbPort),
-		name:     viper.GetString(dbName),
-	}
+	config.Storage = &Storage{}
+
+	config.Storage.username = viper.GetString(dbUsername)
+	config.Storage.password = viper.GetString(dbPassword)
+	config.Storage.host = viper.GetString(dbHost)
+	config.Storage.port = viper.GetString(dbPort)
+	config.Storage.name = viper.GetString(dbName)
+
+	config.Server = &Server{}
+	config.Server.Port = viper.GetInt(listenPort)
 
 	return
 }

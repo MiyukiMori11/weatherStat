@@ -1,3 +1,4 @@
+// Package cmd explorer represents explorer command
 package cmd
 
 import (
@@ -20,8 +21,8 @@ import (
 const serviceName = "explorer"
 
 var (
-	cfgPath string
-	logger  *zap.Logger
+	cfgPathExplorer string
+	logger          *zap.Logger
 )
 
 func RunExplorerCommand() *cobra.Command {
@@ -31,7 +32,7 @@ func RunExplorerCommand() *cobra.Command {
 		RunE:  ExplorerRunE,
 	}
 
-	RunExplorer.Flags().StringVar(&cfgPath, "config", "./config/local.yaml", "path to config file")
+	RunExplorer.Flags().StringVar(&cfgPathExplorer, "config", "./config/local.yaml", "path to config file")
 
 	return RunExplorer
 }
@@ -41,7 +42,7 @@ func ExplorerRunE(command *cobra.Command, args []string) error {
 	logger = zap.NewExample()
 	logger = logger.Named(serviceName)
 
-	cfg, err := config.Load(cfgPath)
+	cfg, err := config.Load(cfgPathExplorer)
 	if err != nil {
 		logger.Fatal("can't init config", zap.Error(err))
 	}
@@ -57,14 +58,14 @@ func ExplorerRunE(command *cobra.Command, args []string) error {
 
 	h := handler.New(logger, s, c)
 
-	initServer(h)
-
 	go p.Run(command.Context())
+
+	initServer(h, *cfg.Server)
 
 	return nil
 }
 
-func initServer(h handler.Handler) {
+func initServer(h handler.Handler, c config.Server) {
 	swaggerSpec, err := loads.Embedded(server.SwaggerJSON, server.FlatSwaggerJSON)
 	if err != nil {
 		log.Fatalln(err)
@@ -82,6 +83,8 @@ func initServer(h handler.Handler) {
 
 	s = server.NewServer(api)
 	defer s.Shutdown()
+
+	s.Port = c.Port
 
 	s.ConfigureAPI()
 	if err := s.Serve(); err != nil {

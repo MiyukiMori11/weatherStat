@@ -13,6 +13,6 @@ type City struct {
 	TempF       float64
 }
 
-type Cities []City
+type Cities []*City
 
 var ErrNotFound = errors.New("not found")

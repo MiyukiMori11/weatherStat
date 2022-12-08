@@ -1,4 +1,7 @@
+// Package handler package with custom handlers
 package handler
+
+//go:generate mockery --dir=. --name=Storage --filename=storage_mock.go --output=. --inpackage
 
 import (
 	"errors"
@@ -35,6 +38,7 @@ type Client interface {
 	GetCoordinates(city, countryCode string) (float64, float64, error)
 }
 
+// New is handler constructor
 func New(logger *zap.Logger, storage Storage, client Client) Handler {
 	return &handler{
 		logger:  logger,
@@ -106,7 +110,7 @@ func (h *handler) DeleteCities(dcp operations.DeleteCitiesParams) middleware.Res
 		dcp.CountryName,
 	); err != nil {
 		h.logger.Error("can't delete city", zap.Error(err), zap.String("country", dcp.CountryName), zap.String("city", dcp.CityName))
-		operations.NewDeleteCitiesBadRequest()
+		return operations.NewDeleteCitiesBadRequest()
 	}
 
 	return operations.NewDeleteCitiesOK()
@@ -115,8 +119,10 @@ func (h *handler) DeleteCities(dcp operations.DeleteCitiesParams) middleware.Res
 // GetTemp handles GET /temp request
 func (h *handler) GetTemp(gtp operations.GetTempParams) middleware.Responder {
 	var err error
-	response := models.CityTemp{
+	response := &models.CityTemp{
 		Name: gtp.CityName,
+		Avgc: 0,
+		Avgf: 0,
 	}
 
 	if response.Avgc, response.Avgf, err = h.storage.GetTemperatureStat(gtp.CityName, gtp.CountryName); err != nil {
@@ -124,5 +130,10 @@ func (h *handler) GetTemp(gtp operations.GetTempParams) middleware.Responder {
 		return operations.NewGetTempBadRequest()
 	}
 
-	return operations.NewGetTempOK().WithPayload(&response)
+	if response.Avgc == response.Avgf && response.Avgc == 0 {
+		h.logger.Debug("temp stat for country not found", zap.Error(err), zap.String("country", gtp.CountryName), zap.String("city", gtp.CityName))
+		return operations.NewGetTempNotFound()
+	}
+
+	return operations.NewGetTempOK().WithPayload(response)
 }
