@@ -1,0 +1,71 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    networks:
+      internal-sandbox:
+        ipv4_address: '172.33.1.1'
+  
+  apigw:
+    image: apigw
+    restart: 'on-failure:30'
+    networks:
+      - internal-sandbox
+    ports:
+      - '8080:8080'
+    depends_on:
+      - explorer
+
+  migration:
+    image: explorer-migration
+    restart: 'on-failure:100'
+    environment:
+      DB_NAME: 'postgres'
+      DB_USERNAME: 'postgres'
+      DB_PASSWORD: 'postgres'
+      DB_HOST: '172.33.1.1'
+      DB_PORT: '5432'
+      CNTDAYARCHIVE: '5'
+    networks:
+      - internal-sandbox
+    depends_on:
+      - db
+
+  explorer:
+    image: explorer
+    restart: 'on-failure:30'
+    environment:
+      DB_NAME: 'postgres'
+      DB_USERNAME: 'postgres'
+      DB_PASSWORD: 'postgres'
+      DB_HOST: '172.33.1.1'
+      DB_PORT: '5432'
+      PARSE_TIMEOUT_MIN: 1
+      CLIENT_TIMEOUT_SEC: 3
+      WEATHER_API_KEY: '91cf114c77d0c8e3d532688ae4278ea3'
+      PORT: '8181'
+    ports: 
+      - '8181:8181'
+    networks:
+      internal-sandbox:
+        ipv4_address: '172.33.2.1'
+    depends_on:
+      - migration
+  
+  
+networks:
+  internal-sandbox:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.33.0.0/16
+
